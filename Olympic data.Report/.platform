@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Olympic data"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "05aae813-4878-45a9-a75b-5b11e98124a7"
+  }
+}

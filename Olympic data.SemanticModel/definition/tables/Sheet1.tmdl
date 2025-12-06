@@ -1,0 +1,170 @@
+table Sheet1
+	lineageTag: 35979b2b-44f5-41d6-9663-a81f7d23c770
+
+	column 'Summer Rank'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9df38271-7d25-4001-89f1-90cac889c7b2
+		summarizeBy: sum
+		sourceColumn: Summer Rank
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Summer Gold'
+		dataType: int64
+		formatString: 0
+		lineageTag: 576db784-2d7c-4b29-bda6-b66aa73eef53
+		summarizeBy: none
+		sourceColumn: Summer Gold
+
+		annotation SummarizationSetBy = User
+
+	column 'Summer Silver '
+		dataType: int64
+		formatString: 0
+		lineageTag: b599629a-2fc3-42c9-b221-9a56723332a8
+		summarizeBy: sum
+		sourceColumn: "Summer Silver "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Summer bronze'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2e484937-fd33-4d76-8848-e9452d560a97
+		summarizeBy: sum
+		sourceColumn: Summer bronze
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Summer total '
+		dataType: int64
+		formatString: 0
+		lineageTag: d1564632-c6de-4033-b40e-25d3a54a2fec
+		summarizeBy: sum
+		sourceColumn: "Summer total "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Winter Rank '
+		dataType: int64
+		formatString: 0
+		lineageTag: 16793dbf-5b40-4571-b769-f19b27a7e243
+		summarizeBy: sum
+		sourceColumn: "Winter Rank "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Winter Gold '
+		dataType: int64
+		formatString: 0
+		lineageTag: a5ad5d11-e3b3-4a62-b483-76795f80cf9e
+		summarizeBy: sum
+		sourceColumn: "Winter Gold "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Winter Silver'
+		dataType: int64
+		formatString: 0
+		lineageTag: d5e86d49-71a5-476e-a761-657189e693b8
+		summarizeBy: sum
+		sourceColumn: Winter Silver
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Winter Bronze '
+		dataType: int64
+		formatString: 0
+		lineageTag: 530ecb82-4e0b-446f-a857-412e5bcbbd1e
+		summarizeBy: sum
+		sourceColumn: "Winter Bronze "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Winter Total '
+		dataType: int64
+		formatString: 0
+		lineageTag: 56099d7f-e79f-47ec-8e8e-c4baf58e1ce6
+		summarizeBy: sum
+		sourceColumn: "Winter Total "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Combi Rank '
+		dataType: int64
+		formatString: 0
+		lineageTag: f68cec3b-0813-455b-8fce-0fc5021d0dcc
+		summarizeBy: sum
+		sourceColumn: "Combi Rank "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Combi Gold '
+		dataType: int64
+		formatString: 0
+		lineageTag: 2cd032e8-4972-42cb-bd5b-fcfd84e91bc1
+		summarizeBy: sum
+		sourceColumn: "Combi Gold "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Combi Silver '
+		dataType: int64
+		formatString: 0
+		lineageTag: e74155ca-d3c8-4da0-ae3b-d004771f514e
+		summarizeBy: sum
+		sourceColumn: "Combi Silver "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Combi Bronze '
+		dataType: int64
+		formatString: 0
+		lineageTag: bea283b6-b994-48aa-bb44-89d1969e979a
+		summarizeBy: sum
+		sourceColumn: "Combi Bronze "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Combi total '
+		dataType: int64
+		formatString: 0
+		lineageTag: 64b6e25a-2eb9-44a3-8eb1-f9122b9b8d9a
+		summarizeBy: sum
+		sourceColumn: "Combi total "
+
+		annotation SummarizationSetBy = Automatic
+
+	column Team
+		dataType: string
+		lineageTag: c2e528b9-5e80-496b-ba4b-c3ea1a85b23d
+		summarizeBy: none
+		sourceColumn: Team
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Sheet1 = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\Power BI\Power BI Data Sources\Power BI Data Sources (5)\Power BI Data Sources\Olympic.xlsx"), null, true),
+				    Sheet1_Sheet = Source{[Item="Sheet1",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sheet1_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Team (IOC code)", type text}, {"Summer Rank", Int64.Type}, {"Summer Gold ", Int64.Type}, {"Summer Silver ", Int64.Type}, {"Summer bronze", Int64.Type}, {"Summer total ", Int64.Type}, {"Winter Rank ", Int64.Type}, {"Winter Gold ", Int64.Type}, {"Winter Silver", Int64.Type}, {"Winter Bronze ", Int64.Type}, {"Winter Total ", Int64.Type}, {"Combi Rank ", Int64.Type}, {"Combi Gold ", Int64.Type}, {"Combi Silver ", Int64.Type}, {"Combi Bronze ", Int64.Type}, {"Combi total ", Int64.Type}}),
+				    #"Sorted Rows" = Table.Sort(#"Changed Type",{{"Summer Rank", Order.Ascending}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Sorted Rows", each true),
+				    #"Sorted Rows1" = Table.Sort(#"Filtered Rows",{{"Team (IOC code)", Order.Ascending}}),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Sorted Rows1", "Team (IOC code)", Splitter.SplitTextByDelimiter("[", QuoteStyle.Csv), {"Team (IOC code).1", "Team (IOC code).2", "Team (IOC code).3", "Team (IOC code).4", "Team (IOC code).5", "Team (IOC code).6"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Team (IOC code).1", type text}, {"Team (IOC code).2", type text}, {"Team (IOC code).3", type text}, {"Team (IOC code).4", type text}, {"Team (IOC code).5", type text}, {"Team (IOC code).6", type text}}),
+				    #"Split Column by Delimiter1" = Table.SplitColumn(#"Changed Type1", "Team (IOC code).1", Splitter.SplitTextByDelimiter("(", QuoteStyle.Csv), {"Team (IOC code).1.1", "Team (IOC code).1.2"}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Split Column by Delimiter1",{{"Team (IOC code).1.1", type text}, {"Team (IOC code).1.2", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type2",{"Team (IOC code).1.2", "Team (IOC code).2", "Team (IOC code).3", "Team (IOC code).4", "Team (IOC code).5", "Team (IOC code).6"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"Summer Gold ", "Summer Gold"}, {"Team (IOC code).1.1", "Team"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+
